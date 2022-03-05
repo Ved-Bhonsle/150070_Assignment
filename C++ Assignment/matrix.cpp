@@ -19,148 +19,124 @@ using namespace std;
 
 class Matrix
 {
-	int a[3][3];
-	int b[3][3];
-	int c[3][3];
-	int i,j,k;
+  int rows, cols;
+  int arr[10][10];
+public:
 
-	public:
-	    void Mult()
-		{
-		    for (i=0; i<3; i++)
-		    {
-			for (j=0; j<3; j++)
-			{
-			    c[i][j]=0;
-			    for (k=0; k<3; k++)
-			    {
-				c[i][j] += a[i][k] * b[k][j];
-			    }
-			}
-		    }
-		}
-	    void sum()
-		{
-		    for (i=0; i<3; i++)
-		    {
-			for (j=0; j<3; j++)
-			{
-			    c[i][j]=0;
-			    for (k=0; k<3; k++)
-			    {
-				c[i][j] += a[i][k] + b[k][j];
-			    }
-			}
-		    }
+  void setRows (int r)
+  {
+    rows = r;
+  }
 
-		}
-	    void InputMatrix()
-		{
-		    cout << "Enter the values for the first matrix";
-		    cout << "\n Matrix 1, Row 1:";
-		    for (i=0; i<3; i++)
-		    {
-			for (j=0; j<3; j++)
-			{
-			    cin >> a[i][j];
-			}
-		    }
-		    cout << "Enter the values for the second matrix";
-		    for (i=0; i<3; i++)
-		    {
-			for (j=0; j<3; j++)
-			{
-			    cin >> b[i][j];
-			}
-		    }
+  void setCols (int c)
+  {
+    cols = c;
+  }
 
-		}
-	    void OutputMatrix()
-		{
-		    cout << "The Resultant Matrix is: \n";
-		    for (i=0; i<3; i++)
-		    {
-			for (j=0; j<3; j++)
-			{
-			    cout << c[i][j];
-			}
-			cout << endl;
-		    }
-		}
+  void setElement (int r, int c, int element)
+  {
+    arr[r][c] = element;
+  }
+
+  void addMatrices (Matrix m1, Matrix m2)
+  {
+    int i, j;
+    rows = m1.rows;
+    cols = m1.cols;
+    for (i = 0; i < rows; i++)
+      {
+	for (j = 0; j < cols; j++)
+	  {
+	    arr[i][j] = m2.arr[i][j] + m1.arr[i][j];
+	  }
+      }
+  }
+
+  void mulMatrices (Matrix m1, Matrix m2)
+  {
+    int i, j, k;
+    rows = m1.rows;
+    cols = m1.cols;
+    for (int i = 0; i < rows; i++)
+      {
+	for (int j = 0; j < cols; j++)
+	  {
+	    arr[i][j] = 0;
+	    for (int k = 0; k < cols; ++k)
+	      {
+		arr[i][j] += m2.arr[i][k] * m1.arr[k][j];
+	      }
+	  }
+      }
+  }
+
+  void display ()
+  {
+    int i, j;
+    for (i = 0; i < rows; i++)
+      {
+	for (j = 0; j < cols; j++)
+	  {
+	    cout << arr[i][j] << " ";
+	  }
+	cout << endl;
+      }
+  }
+
 };
-/*
-void Matrix::InputMatrix()
-{
-    cout << "Enter the values for the first matrix";
-    cout << "\n Matrix 1, Row 1:";
-    for (i=0; i<3; i++)
-    {
-        for (j=0; j<3; j++)
-        {
-            cin >> a[i][j];
-        }
-    }
-    cout << "Enter the values for the second matrix";
-    for (i=0; i<3; i++)
-    {
-        for (j=0; j<3; j++)
-        {
-            cin >> b[i][j];
-        }
-    }
-}
 
-void Matrix::sum()
+int
+main ()
 {
-    for (i=0; i<3; i++)
-    {
-        for (j=0; j<3; j++)
-        {
-            c[i][j]=0;
-            for (k=0; k<3; k++)
-            {
-                c[i][j] += a[i][k] + b[k][j];
-            }
-        }
-    }
-}
+  int r, c, i, j, element;
+  Matrix m1, m2, m3, m4;
 
-void Matrix::Mult()
-{
-    for (i=0; i<3; i++)
-    {
-        for (j=0; j<3; j++)
-        {
-            c[i][j]=0;
-            for (k=0; k<3; k++)
-            {
-                c[i][j] += a[i][k] * b[k][j];
-            }
-        }
-    }
-}
+  cout << "Enter number of rows for Matrix 1:";
+  cin >> r;
+  cout << "Enter number of columns for Matrix 1:";
+  cin >> c;
+  m1.setCols (c);
+  m1.setRows (r);
 
-void Matrix::OutputMatrix()
-{
-    cout << "The Resultant Matrix is: \n";
-    for (i=0; i<3; i++)
+  cout << "Enter number of rows for Matrix 2:";
+  cin >> r;
+  cout << "Enter number of columns for Matrix 2:";
+  cin >> c;
+  m2.setCols (c);
+  m2.setRows (r);
+
+  cout << "Enter elements for Matrix 1:" << endl;
+  for (i = 0; i < r; i++)
     {
-        for (j=0; j<3; j++)
-        {
-            cout << c[i][j];
-        }
-        cout << endl;
+      for (j = 0; j < c; j++)
+	{
+	  cin >> element;
+	  m1.setElement (i, j, element);
+	}
     }
-}
-*/
-int main()
-{
-    Matrix x;
-    x.InputMatrix();
-    x.Mult();
-    x.OutputMatrix();
-    x.sum();
-    x.OutputMatrix();
-    system ("pause");
-    return 0;
+
+  cout << "Enter elements for Matrix 2:" << endl;
+  for (i = 0; i < r; i++)
+    {
+      for (j = 0; j < c; j++)
+	{
+	  cin >> element;
+	  m2.setElement (i, j, element);
+	}
+    }
+
+  cout << endl << "Matrix 1:" << endl;
+  m1.display ();
+  cout << endl << "Matrix 2:" << endl;
+  m2.display ();
+
+  cout << endl << "Addition of the two Matrices: " << endl;
+  m3.addMatrices (m1, m2);
+  m3.display ();
+
+  cout << endl << "Multiplication of the two Matrices: " << endl;
+  m4.mulMatrices (m1, m2);
+  m4.display ();
+
+  return 0;
 }
