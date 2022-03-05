@@ -12,9 +12,10 @@ Variation 2: Print Bottom-Up
 
 #include<iostream>
 #include<queue>
+#include<vector>
+#include<unordered_map>
 using namespace std;
 
-//Data Structure to store a binary tree node;
 struct Node
 {
     int data;
@@ -27,43 +28,32 @@ struct Node
     }
 };
 
-//function to print all nodes of a given binary tree in a specific
-//order from top to bottom
-
-void printNode(Node* root)
+void printNode_top_down(Node* root)
 {
-    //return if the tree is empty
     if(root==NULL){
     return;
     }
     
-    //print the root Node
-    cout<<root->data<<" ";
+    cout<<root->data<<" "; //print the root Node
     
-    //create two empty queues and enqueue root's left and right child, respectively
-    queue<Node*>q1,q2;
+    queue<Node*>q1,q2; //create two empty queues and enqueue root's left and right child, respectively
     
     if(root->l && root->r)
     {
         q1.push(root->l);
         q2.push(root->r);
     }
-    //loop till queue is empty
-    while(!q1.empty())
+    while(!q1.empty()) //loop till queue is empty
     {
-        //calculate the total number of nodes at the current level
-        int n = q1.size();
+        int n = q1.size(); //process every node of the current level
         
-        //process every node of the current level
-        while(n--)
+        while(n--) //process every node of the current level
         {
-            //dequeue front node from the first queue and print it
-            Node* x = q1.front();
+            Node* x = q1.front();//dequeue front node from the first queue and print it
             q1.pop();
             cout<<x->data<<" ";
             
-            //enqueue left and right child of 'x' to the first queue
-            if(x->l)
+            if(x->l)//enqueue left and right child of 'x' to the first queue
             {
                 q1.push(x->l);
             }
@@ -73,13 +63,11 @@ void printNode(Node* root)
                 q1.push(x->r);
             }
             
-            //dequeue front node from the second queue and print it
-            Node* y = q2.front();
+            Node* y = q2.front(); //dequeue front node from the second queue and print it
             q2.pop();
             cout<<y->data<<" ";
             
-            //enqueue left and right child of 'x' to the first queue
-            if(y->r)
+            if(y->r) //enqueue left and right child of 'x' to the first queue
             {
                 q2.push(y->r);
             }
@@ -93,9 +81,59 @@ void printNode(Node* root)
     }
 }
 
+void printNodes_bottom_up(Node* root)
+{
+  if(root ==NULL) //return if the tree is empty
+  {
+   return ;
+   }
+
+  int level = 1;
+
+  unordered_map<int, vector<int>> map; //create an empty multimap of int associated with multiple values
+
+  map[level].push_back(root->data); //insert the root node at the first level
+  queue<Node*>q1,q2;
+  
+  if(root->l && root->r)
+  {
+    q1.push(root->l);
+    q2.push(root->r);
+   }
+
+    while(!q1.empty()) //loop till queue is empty
+    {
+      level++;
+      int n = q1.size();
+
+       while(n--)
+        {
+            Node* x = q1.front(); //dequeue front node from the first queue and print it
+            q1.pop();
+       
+            map[level].push_back(x->data);
+             if(x->l) { q1.push(x->l); } //enqueue left and right child of 'x' to the first queue
+            
+            if(x->r) { q1.push(x->r); }
+            Node* y = q2.front(); //dequeue front node from the first queue and print it
+            q2.pop();
+            map[level].push_back(y->data);
+            if(y->r) { q2.push(y->r); } //enqueue left and right child of 'x' to the first queue
+            
+            if(y->l) { q2.push(y->l); }
+         }
+     }
+        for(int i=map.size();i>0; i--)        //print all nodes present at every level
+        {
+           for(int j: map[i]){
+             cout<<j<<" ";
+        }
+     }
+ }           
 int main()
 {
     Node* root = new Node(1);
+    
     root->l = new Node(2);
     root->r = new Node(3);
     root->l->l = new Node(4);
@@ -111,6 +149,12 @@ int main()
     root->r->r->l = new Node(14);
     root->r->r->r = new Node(15);
     
-    printNode(root);
+    cout<<"Print Top-Down"<<endl;
+    printNode_top_down(root);
+    
+    cout<<"\nPrint Bottom-Up"<<endl;
+    printNodes_bottom_up(root);
+    cout << endl;
+    
     return 0;
 }
